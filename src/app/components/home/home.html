@@ -1,2 +1,29 @@
-<h3>Home Component</h3>
-<p>Welcome to Angular Seed</p>
+<div class="container">
+  <div class="row mt centered">
+    <div class="col-lg-6 col-lg-offset-3">
+      <h1>Pokerstats</h1>
+      <h3>The smart poker status manager!</h3>
+
+      <p>List of all players:</p>
+      <ul>
+        <li *ngFor="let player of players | async">
+          {{ player.firstName + ' ' + player.lastName }}
+        </li>
+      </ul>
+    </div>
+  </div><!-- /row -->
+  <hr>
+  <div class="row centered">
+    <div class="col-lg-6 col-lg-offset-3">
+      <form class="form-inline" role="form">
+        <div class="form-group">
+          <input type="text" class="form-control" #firstName placeholder="first name">
+          <input type="text" class="form-control" #lastName placeholder="last name">
+        </div>
+        <button (click)="createPlayer(firstName.value, lastName.value)" class="btn btn-primary btn-lg">create</button>
+      </form>
+    </div>
+    <div class="col-lg-3"></div>
+  </div><!-- /row -->
+  <hr>
+</div>
