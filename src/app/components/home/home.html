@@ -6,7 +6,7 @@
 
       <p>List of all players:</p>
       <ul>
-        <li *ngFor="let player of players | async">
+        <li *ngFor="let player of players">
           {{ player.firstName + ' ' + player.lastName }}
         </li>
       </ul>
