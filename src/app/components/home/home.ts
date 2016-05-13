@@ -3,7 +3,7 @@ import {Http, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Player} from './player';
 import {AccountPosition} from './accountPosition';
-import {PlayerService} from './home-service';
+import {PlayerService} from './player-service';
 import {AccountPositionService} from './accountposition-service';
 
 @Component({
@@ -15,8 +15,9 @@ import {AccountPositionService} from './accountposition-service';
   pipes: []
 })
 export class Home {
-  players:Player[];
-  accountPositions:AccountPosition[];
+  private players:Player[];
+  private selectedPlayer:Player;
+  private accountPositions:AccountPosition[];
 
   constructor(private service:PlayerService, private accountPositionService:AccountPositionService) {
   }
@@ -34,18 +35,19 @@ export class Home {
       );
   }
 
-  createAccountPosition(playerId:number, amount:number, currency:string) {
+  createAccountPosition(amount:number, currency:string) {
     return this.accountPositionService
-      .create(playerId, amount, currency)
+      .create(this.selectedPlayer.id, amount, currency)
       .subscribe((data:AccountPosition) => this.accountPositions.push(data),
         error => console.log(error),
         () => console.log('AccountPosition created!!')
       );
   }
 
-  showAccountPositions(playerId:number) {
+  showAccountPositions(player:Player) {
+    this.selectedPlayer = player;
     this.accountPositionService
-      .getAccountPositions(playerId)
+      .getAccountPositions(player.id)
       .subscribe((data:AccountPosition[]) => this.accountPositions = data,
         error => console.log(error),
         () => console.log('AccountPositions loaded!!')

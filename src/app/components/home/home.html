@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let player of players">
+        <tr *ngFor="let player of players" (click)="showAccountPositions(player)">
           <td>{{ player.firstName }}</td>
           <td>{{ player.lastName }}</td>
         </tr>
@@ -29,17 +29,10 @@
     </div>
   </div><!-- /row -->
   <hr>
-  <div class="row mt centered">
+  <div class="{{ (selectedPlayer == null) ? 'hide' : 'row mt centered' }}">
     <div class="col-lg-10 col-lg-offset-1">
-      <p>List of all account positions for:</p>
-      <form class="form-inline" role="form">
-        <div class="form-group">
-          <input type="text" class="form-control" #playerIdForAccountPositions placeholder="player id">
-        </div>
-        <button (click)="showAccountPositions(playerIdForAccountPositions.value)"
-                class="btn btn-primary btn-lg">show
-        </button>
-      </form>
+      <p>List of all account positions for {{ (selectedPlayer == null) ? 'No player selected' :
+        selectedPlayer.firstName + ' ' + selectedPlayer.lastName }}:</p>
       <table class="table table-hover">
         <thead>
         <tr>
@@ -56,15 +49,14 @@
       </table>
       <form class="form-inline" role="form">
         <div class="form-group">
-          <input type="text" class="form-control" #playerId placeholder="player id">
           <input type="text" class="form-control" #amount placeholder="amount">
           <input type="text" class="form-control" #currency placeholder="currency">
         </div>
-        <button (click)="createAccountPosition(playerId.value, amount.value, currency.value)"
+        <button (click)="createAccountPosition(amount.value, currency.value)"
                 class="btn btn-primary btn-lg">create
         </button>
       </form>
     </div>
+    <hr>
   </div><!-- /row -->
-  <hr>
 </div>
