@@ -40,7 +40,7 @@
         (selectedPlayer == null) ? 'No player selected' : selectedPlayer.firstName + ' ' + selectedPlayer.lastName
         }}:</a></h4>
     </div>
-    <div id="accountPositionList" class="col-lg-10 col-lg-offset-1">
+    <div id="accountPositionList" class="col-lg-10 col-lg-offset-1 collapse in">
       <table class="table table-hover">
         <thead>
         <tr>
@@ -57,10 +57,10 @@
       </table>
       <form class="form-inline" role="form">
         <div class="form-group">
-          <input type="text" class="form-control" #amount placeholder="amount">
-          <input type="text" class="form-control" #currency placeholder="currency">
+          <input type="text" class="form-control" #bigCurrency placeholder="CHF">
+          <input type="text" class="form-control" #smallCurrency placeholder="Rappen">
         </div>
-        <button (click)="createAccountPosition(amount.value, currency.value)"
+        <button (click)="createAccountPosition(bigCurrency.value, smallCurrency.value)"
                 class="btn btn-primary btn-lg">create
         </button>
       </form>

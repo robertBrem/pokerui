@@ -40,9 +40,11 @@ export class Home {
       );
   }
 
-  createAccountPosition(amount:number, currency:string) {
+  createAccountPosition(bigCurrency:number, smallCurrency:number) {
+    let inSmallCurrency:number = (+bigCurrency * 100);
+    let amount:number = +inSmallCurrency + +smallCurrency;
     return this.accountPositionService
-      .create(this.selectedPlayer.id, amount, currency)
+      .create(this.selectedPlayer.id, amount, 'CHF')
       .subscribe((data:AccountPosition) => {
           this.updatePlayerWithBalance(this.selectedPlayer);
           let position:AccountPosition = data;
