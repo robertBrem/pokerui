@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Player} from './player';
+import {Balance} from './balance';
 import {AccountPosition} from './accountPosition';
 import {PlayerService} from './player-service';
 import {AccountPositionService} from './accountposition-service';
@@ -29,7 +30,11 @@ export class Home {
   createPlayer(firstName:string, lastName:string) {
     return this.service
       .create(firstName, lastName)
-      .subscribe((data:Player) => this.players.push(data),
+      .subscribe((data:Player) => {
+          let player:Player = data;
+          this.updatePlayerWithBalance(player);
+          this.players.push(player);
+        },
         error => console.log(error),
         () => console.log('Player created!!')
       );
@@ -38,7 +43,10 @@ export class Home {
   createAccountPosition(amount:number, currency:string) {
     return this.accountPositionService
       .create(this.selectedPlayer.id, amount, currency)
-      .subscribe((data:AccountPosition) => this.accountPositions.push(data),
+      .subscribe((data:AccountPosition) => {
+          this.updatePlayerWithBalance(this.selectedPlayer);
+          this.accountPositions.push(data);
+        },
         error => console.log(error),
         () => console.log('AccountPosition created!!')
       );
@@ -57,10 +65,26 @@ export class Home {
   private getPlayers() {
     this.service
       .getAll()
-      .subscribe((data:Player[]) => this.players = data,
+      .subscribe((data:Player[]) => {
+          this.players = data;
+          let key;
+          for (key in data) {
+            let player:Player = this.players[key];
+            this.updatePlayerWithBalance(player);
+          }
+        },
         error => console.log(error),
         () => console.log('Players loaded!!')
       );
   }
+
+  private updatePlayerWithBalance(player:Player) {
+    this.accountPositionService
+      .getBalance(player.id)
+      .subscribe((data:Balance) => player.balance = data.value,
+        error => console.log(error),
+        () => console.log('Balance loaded!!' + player.balance)
+      );
+  };
 
 }

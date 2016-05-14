@@ -2,13 +2,9 @@ export class Player {
   id:number;
   firstName:string;
   lastName:string;
+  balance:number;
 
   constructor() {
-  }
-
-  public toString = ():string => {
-    console.log('toString');
-    return this.firstName + ' ' + this.lastName;
   }
 
 }
