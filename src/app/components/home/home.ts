@@ -45,7 +45,12 @@ export class Home {
       .create(this.selectedPlayer.id, amount, currency)
       .subscribe((data:AccountPosition) => {
           this.updatePlayerWithBalance(this.selectedPlayer);
-          this.accountPositions.push(data);
+          let position:AccountPosition = data;
+          let bigCurrencyAmount = position.amount / 100;
+          position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
+          let date:Date = new Date(position.date.toString());
+          position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
+          this.accountPositions.push(position);
         },
         error => console.log(error),
         () => console.log('AccountPosition created!!')
@@ -56,7 +61,17 @@ export class Home {
     this.selectedPlayer = player;
     this.accountPositionService
       .getAccountPositions(player.id)
-      .subscribe((data:AccountPosition[]) => this.accountPositions = data,
+      .subscribe((data:AccountPosition[]) => {
+          this.accountPositions = data;
+          let key;
+          for (key in data) {
+            let position:AccountPosition = this.accountPositions[key];
+            let bigCurrencyAmount = position.amount / 100;
+            position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
+            let date:Date = new Date(position.date.toString());
+            position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
+          }
+        },
         error => console.log(error),
         () => console.log('AccountPositions loaded!!')
       );
@@ -81,7 +96,12 @@ export class Home {
   private updatePlayerWithBalance(player:Player) {
     this.accountPositionService
       .getBalance(player.id)
-      .subscribe((data:Balance) => player.balance = data.value,
+      .subscribe((data:Balance) => {
+          let totalSmallCurrencyAmount:number = data.value;
+          let balance = totalSmallCurrencyAmount / 100;
+          player.balance = balance.toLocaleString('DE-CH', {minimumFractionDigits: 2});
+          player.currency = data.currency;
+        },
         error => console.log(error),
         () => console.log('Balance loaded!!' + player.balance)
       );
