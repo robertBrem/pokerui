@@ -40,9 +40,12 @@ export class Home {
       );
   }
 
-  createAccountPosition(bigCurrency:number, smallCurrency:number) {
+  createAccountPosition(prefix:string, bigCurrency:number, smallCurrency:number) {
     let inSmallCurrency:number = (+bigCurrency * 100);
     let amount:number = +inSmallCurrency + +smallCurrency;
+    if (prefix == '-') {
+      amount = -amount;
+    }
     return this.accountPositionService
       .create(this.selectedPlayer.id, amount, 'CHF')
       .subscribe((data:AccountPosition) => {

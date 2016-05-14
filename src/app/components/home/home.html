@@ -57,10 +57,11 @@
       </table>
       <form class="form-inline" role="form">
         <div class="form-group">
+          <input type="text" class="form-control" #prefix placeholder="+">
           <input type="text" class="form-control" #bigCurrency placeholder="CHF">
           <input type="text" class="form-control" #smallCurrency placeholder="Rappen">
         </div>
-        <button (click)="createAccountPosition(bigCurrency.value, smallCurrency.value)"
+        <button (click)="createAccountPosition(prefix.value, bigCurrency.value, smallCurrency.value)"
                 class="btn btn-primary btn-lg">create
         </button>
       </form>
