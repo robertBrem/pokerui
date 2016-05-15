@@ -7,7 +7,8 @@
   </div>
   <div class="row mt centered">
     <h3 class="first">Basic</h3>
-    <p-lineChart [value]="data" width="640" height="320" [legend]="lgnd"></p-lineChart>
+    <p-lineChart [value]="data" width="640" height="320" [scaleStartValue]="-100" [scaleBeginAtZero]="false"
+                 [scaleOverride]="true" [scaleSteps]="20" [scaleStepWidth]="10" [legend]="lgnd"></p-lineChart>
     <div #lgnd></div>
   </div>
 </div>
