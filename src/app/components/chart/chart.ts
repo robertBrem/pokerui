@@ -60,7 +60,11 @@ export class LineChartDemo {
       let historyKey;
       for (historyKey in player.accountHistory) {
         let accountHistory:TimeEntry = player.accountHistory[historyKey];
-        playerData.push(accountHistory.balance / 100);
+        if (accountHistory.balance == null) {
+          playerData.push(null);
+        } else {
+          playerData.push(accountHistory.balance / 100);
+        }
         labels.push(accountHistory.date);
       }
 
@@ -76,9 +80,12 @@ export class LineChartDemo {
       });
     }
 
-    this.data = {
+    this
+      .
+      data = {
       labels: labels,
       datasets: datasets
     }
-  };
+  }
+  ;
 }
