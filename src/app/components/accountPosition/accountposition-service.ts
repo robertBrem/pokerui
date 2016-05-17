@@ -42,7 +42,7 @@ export class AccountPositionService {
 
   public getAccountHistory = (playerId:number):Observable<TimeEntry[]> => {
     return this.http
-      .get(this.playersUrl + playerId + '/accounthistory/')
+      .get(this.playersUrl + playerId + '/accounthistory/' + '?summedUp=true')
       .map(res => res.json());
   }
 

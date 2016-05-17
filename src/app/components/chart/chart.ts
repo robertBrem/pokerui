@@ -51,7 +51,7 @@ export class LineChartDemo {
   }
 
   private redraw() {
-    let labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    let labels = [];
     let datasets = [];
     let key;
     for (key in this.players) {
@@ -61,6 +61,7 @@ export class LineChartDemo {
       for (historyKey in player.accountHistory) {
         let accountHistory:TimeEntry = player.accountHistory[historyKey];
         playerData.push(accountHistory.balance / 100);
+        labels.push(accountHistory.date);
       }
 
       datasets.push({
