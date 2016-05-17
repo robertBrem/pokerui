@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Player } from './../player/player';
 import { Balance } from './../player/balance';
 import {AccountPosition} from "./accountPosition";
+import {TimeEntry} from "./timeentry";
 
 @Injectable()
 export class AccountPositionService {
@@ -36,6 +37,12 @@ export class AccountPositionService {
   public getAccountPositions = (playerId:number):Observable<AccountPosition[]> => {
     return this.http
       .get(this.playersUrl + playerId + '/accountpositions/')
+      .map(res => res.json());
+  }
+
+  public getAccountHistory = (playerId:number):Observable<TimeEntry[]> => {
+    return this.http
+      .get(this.playersUrl + playerId + '/accounthistory/')
       .map(res => res.json());
   }
 
