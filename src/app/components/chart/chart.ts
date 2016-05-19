@@ -5,6 +5,7 @@ import {Player} from './../player/player';
 import {Balance} from './../player/balance';
 import {AccountPosition} from './../accountPosition/accountPosition';
 import {TimeEntry} from './../accountPosition/timeentry';
+import {HistoryEntry} from './../accountPosition/historyentry';
 import {PlayerService} from './../player/player-service';
 import {AccountPositionService} from './../accountPosition/accountposition-service';
 
@@ -18,30 +19,14 @@ import {AccountPositionService} from './../accountPosition/accountposition-servi
 })
 export class LineChartDemo {
   private data:any;
-  private players:Player[];
+  private history:HistoryEntry[];
 
   constructor(private playerService:PlayerService, private accountPositionService:AccountPositionService) {
-    playerService
-      .getAll()
-      .subscribe((data:Player[]) => {
-          this.players = data;
-          let key;
-          for (key in this.players) {
-            let player:Player = this.players[key];
-            accountPositionService
-              .getAccountHistory(player.id)
-              .subscribe((data:TimeEntry[]) => {
-                  player.accountHistory = data;
-                  let key;
-                  for (key in data) {
-                    let entry:TimeEntry = player.accountHistory[key];
-                  }
-                  this.redraw();
-                },
-                error => console.log(error),
-                () => console.log('AccountPositions loaded!!')
-              );
-          }
+    accountPositionService
+      .getAccountHistory()
+      .subscribe((data:HistoryEntry[]) => {
+          this.history = data;
+          this.redraw();
         },
         error => console.log(error),
         () => console.log('Players loaded!!')
@@ -54,12 +39,14 @@ export class LineChartDemo {
     let labels = [];
     let datasets = [];
     let key;
-    for (key in this.players) {
-      let player:Player = this.players[key];
+    for (key in this.history) {
+      let player:HistoryEntry = this.history[key];
       let playerData = [];
       let historyKey;
-      for (historyKey in player.accountHistory) {
-        let accountHistory:TimeEntry = player.accountHistory[historyKey];
+      labels = [];
+      for (historyKey in player.history) {
+        let accountHistory:TimeEntry = player.history[historyKey];
+        console.log(accountHistory);
         if (accountHistory.balance == null) {
           playerData.push(null);
         } else {
@@ -67,9 +54,11 @@ export class LineChartDemo {
         }
         labels.push(accountHistory.date);
       }
+      console.log(player.playerName);
+      console.log(playerData);
 
       datasets.push({
-        label: player.firstName + ' ' + player.lastName,
+        label: player.playerName,
         fillColor: 'rgba(220,220,220,0.2)',
         strokeColor: 'rgba(220,220,220,1)',
         pointColor: 'rgba(220,220,220,1)',
@@ -80,12 +69,9 @@ export class LineChartDemo {
       });
     }
 
-    this
-      .
-      data = {
+    this.data = {
       labels: labels,
       datasets: datasets
     }
-  }
-  ;
+  };
 }

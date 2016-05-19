@@ -6,6 +6,7 @@ import { Player } from './../player/player';
 import { Balance } from './../player/balance';
 import {AccountPosition} from "./accountPosition";
 import {TimeEntry} from "./timeentry";
+import {HistoryEntry} from "./historyentry";
 
 @Injectable()
 export class AccountPositionService {
@@ -40,9 +41,15 @@ export class AccountPositionService {
       .map(res => res.json());
   }
 
-  public getAccountHistory = (playerId:number):Observable<TimeEntry[]> => {
+  public getAccountHistoryForPlayer = (playerId:number):Observable<TimeEntry[]> => {
     return this.http
       .get(this.playersUrl + playerId + '/accounthistory/' + '?summedUp=true')
+      .map(res => res.json());
+  }
+
+  public getAccountHistory = ():Observable<HistoryEntry[]> => {
+    return this.http
+      .get(this.playersUrl + 'accounthistory/' + '?summedUp=true')
       .map(res => res.json());
   }
 
