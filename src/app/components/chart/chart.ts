@@ -22,8 +22,12 @@ export class LineChartDemo {
   private history:HistoryEntry[];
 
   constructor(private playerService:PlayerService, private accountPositionService:AccountPositionService) {
-    accountPositionService
-      .getAccountHistory()
+    this.updateGraph('MINUTES');
+  }
+
+  private updateGraph(timeUnit:string) {
+    this.accountPositionService
+      .getAccountHistory(timeUnit)
       .subscribe((data:HistoryEntry[]) => {
           this.history = data;
           this.redraw();
@@ -31,8 +35,6 @@ export class LineChartDemo {
         error => console.log(error),
         () => console.log('Players loaded!!')
       );
-
-    this.redraw();
   }
 
   private redraw() {
