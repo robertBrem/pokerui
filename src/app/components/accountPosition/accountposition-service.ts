@@ -47,9 +47,9 @@ export class AccountPositionService {
       .map(res => res.json());
   }
 
-  public getAccountHistory = (timeUnit:string):Observable<HistoryEntry[]> => {
+  public getAccountHistory = (timeUnit:string, maxEntries:number):Observable<HistoryEntry[]> => {
     return this.http
-      .get(this.playersUrl + 'accounthistory/' + '?summedUp=true&timeUnit=' + timeUnit)
+      .get(this.playersUrl + 'accounthistory/' + '?summedUp=true&timeUnit=' + timeUnit + '&maxEntries=' + maxEntries)
       .map(res => res.json());
   }
 
