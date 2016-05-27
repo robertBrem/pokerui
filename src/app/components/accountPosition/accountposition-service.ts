@@ -25,7 +25,7 @@ export class AccountPositionService {
   public create = (playerId:number, amount:number, currency:string):Observable<AccountPosition> => {
     var toAdd = JSON.stringify({playerId: playerId, amount: amount, currency: currency});
     return this.http
-      .post(this.playersUrl + playerId, toAdd, {headers: this.headers})
+      .post(this.playersUrl + playerId + '/accountpositions/', toAdd, {headers: this.headers})
       .map(res => res.json());
   }
 
