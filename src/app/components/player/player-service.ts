@@ -1,8 +1,8 @@
-import {  Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import 'rxjs/add/operator/map'
-import { Observable } from 'rxjs/Observable';
-import { Player } from './player';
+import {Observable} from 'rxjs/Observable';
+import {Player} from './player';
 import {KeycloakService} from '../../../keycloak';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class PlayerService {
 
   constructor(private http:Http, private kc:KeycloakService) {
     let baseUrl:string = process.env.POKERTRACKER_URL;
-    if( baseUrl == undefined) {
+    if (baseUrl == undefined) {
       baseUrl = 'http://localhost:8080/pokertracker/';
     }
     let api:string = 'resources/';
@@ -20,24 +20,16 @@ export class PlayerService {
 
   public getAll = ():Promise<Observable<Player[]>> => {
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
       return this.http
-        .get(this.playersUrl, new RequestOptions({ headers: headers }))
+        .get(this.playersUrl, new RequestOptions({headers: this.getHeaders(token)}))
         .map(res => res.json());
     })
   }
 
   public find = (id:number):Promise<Observable<Player>> => {
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
       return this.http
-        .get(this.playersUrl + id, new RequestOptions({ headers: headers }))
+        .get(this.playersUrl + id, new RequestOptions({headers: this.getHeaders(token)}))
         .map(res => res.json());
     });
   }
@@ -45,37 +37,32 @@ export class PlayerService {
   public create = (firstName:string, lastName:string):Promise<Observable<Player>> => {
     var toAdd = JSON.stringify({firstName: firstName, lastName: lastName});
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
-      console.log('header ' + headers.get('Authorization'));
       return this.http
-        .post(this.playersUrl, toAdd, new RequestOptions({ headers: headers }))
+        .post(this.playersUrl, toAdd, new RequestOptions({headers: this.getHeaders(token)}))
         .map(res => res.json());
     });
   }
 
   public update = (id:number, itemToUpdate:Player):Promise<Observable<Player>> => {
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
       return this.http
-        .put(this.playersUrl + id, JSON.stringify(itemToUpdate), new RequestOptions({ headers: headers }))
+        .put(this.playersUrl + id, JSON.stringify(itemToUpdate), new RequestOptions({headers: this.getHeaders(token)}))
         .map(res => res.json());
     });
   }
 
   public delete = (id:number):Promise<Observable<Response>> => {
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
       return this.http
-      .delete(this.playersUrl + id, new RequestOptions({ headers: headers }));
-  });
+        .delete(this.playersUrl + id, new RequestOptions({headers: this.getHeaders(token)}));
+    });
+  }
+
+  private getHeaders(token) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer ' + token);
+    return headers;
   }
 }
