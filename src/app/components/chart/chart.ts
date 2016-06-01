@@ -33,13 +33,15 @@ export class LineChartDemo {
     console.log('maxEntries: ' + maxEntries);
     this.accountPositionService
       .getAccountHistory(timeUnit, maxEntries)
-      .subscribe((data:HistoryEntry[]) => {
-          this.history = data;
-          this.redraw();
-        },
-        error => console.log(error),
-        () => console.log('Players loaded!!')
-      );
+      .then(pro => {
+        pro.subscribe((data:HistoryEntry[]) => {
+            this.history = data;
+            this.redraw();
+          },
+          error => console.log(error),
+          () => console.log('Players loaded!!')
+        );
+      });
   }
 
   private redraw() {

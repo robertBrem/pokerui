@@ -1,6 +1,4 @@
 import {Component} from '@angular/core';
-import {Http, Headers} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
 
 import {Player} from './../player/player';
 import {Balance} from './../player/balance';
@@ -31,14 +29,16 @@ export class Home {
   createPlayer(firstName:string, lastName:string) {
     return this.playerService
       .create(firstName, lastName)
-      .subscribe((data:Player) => {
-          let player:Player = data;
-          this.updatePlayerWithBalance(player);
-          this.players.push(player);
-        },
-        error => console.log(error),
-        () => console.log('Player created!!')
-      );
+      .then(pro => {
+        pro.subscribe((data:Player) => {
+            let player:Player = data;
+            this.updatePlayerWithBalance(player);
+            this.players.push(player);
+          },
+          error => console.log(error),
+          () => console.log('Player created!!')
+        );
+      });
   }
 
   createAccountPosition(prefix:string, bigCurrency:number, smallCurrency:number) {
@@ -49,44 +49,49 @@ export class Home {
     }
     return this.accountPositionService
       .create(this.selectedPlayer.id, amount, 'CHF')
-      .subscribe((data:AccountPosition) => {
-          this.updatePlayerWithBalance(this.selectedPlayer);
-          let position:AccountPosition = data;
-          let bigCurrencyAmount = position.amount / 100;
-          position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
-          let date:Date = new Date(position.creationDate.toString());
-          position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
-          this.accountPositions.push(position);
-        },
-        error => console.log(error),
-        () => console.log('AccountPosition created!!')
-      );
+      .then(pro => {
+        pro.subscribe((data:AccountPosition) => {
+            this.updatePlayerWithBalance(this.selectedPlayer);
+            let position:AccountPosition = data;
+            let bigCurrencyAmount = position.amount / 100;
+            position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
+            let date:Date = new Date(position.creationDate.toString());
+            position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
+            this.accountPositions.push(position);
+          },
+          error => console.log(error),
+          () => console.log('AccountPosition created!!')
+        );
+      });
   }
 
   showAccountPositions(player:Player) {
     this.selectedPlayer = player;
     this.accountPositionService
       .getAccountPositions(player.id)
-      .subscribe((data:AccountPosition[]) => {
-          this.accountPositions = data;
-          let key;
-          for (key in data) {
-            let position:AccountPosition = this.accountPositions[key];
-            let bigCurrencyAmount = position.amount / 100;
-            position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
-            let date:Date = new Date(position.creationDate.toString());
-            position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
-          }
-        },
-        error => console.log(error),
-        () => console.log('AccountPositions loaded!!')
-      );
+      .then(pro => {
+        pro.subscribe((data:AccountPosition[]) => {
+            this.accountPositions = data;
+            let key;
+            for (key in data) {
+              let position:AccountPosition = this.accountPositions[key];
+              let bigCurrencyAmount = position.amount / 100;
+              position.formattedAmount = bigCurrencyAmount.toLocaleString('DE-CH', {minimumFractionDigits: 2}) + ' ' + position.currency;
+              let date:Date = new Date(position.creationDate.toString());
+              position.formattedDate = date.toLocaleDateString('DE-CH') + ' ' + date.toLocaleTimeString('DE-CH');
+            }
+          },
+          error => console.log(error),
+          () => console.log('AccountPositions loaded!!')
+        );
+      });
   }
 
   private getPlayers() {
     this.playerService
       .getAll()
-      .subscribe((data:Player[]) => {
+      .then(pro => {
+       pro.subscribe((data:Player[]) => {
           this.players = data;
           let key;
           for (key in data) {
@@ -96,21 +101,24 @@ export class Home {
         },
         error => console.log(error),
         () => console.log('Players loaded!!')
-      );
+        );
+      });
   }
 
   private updatePlayerWithBalance(player:Player) {
     this.accountPositionService
       .getBalance(player.id)
-      .subscribe((data:Balance) => {
-          let totalSmallCurrencyAmount:number = data.value;
-          let balance = totalSmallCurrencyAmount / 100;
-          player.balance = balance.toLocaleString('DE-CH', {minimumFractionDigits: 2});
-          player.currency = data.currency;
-        },
-        error => console.log(error),
-        () => console.log('Balance loaded!!' + player.balance)
-      );
+      .then(pro => {
+        pro.subscribe((data:Balance) => {
+            let totalSmallCurrencyAmount:number = data.value;
+            let balance = totalSmallCurrencyAmount / 100;
+            player.balance = balance.toLocaleString('DE-CH', {minimumFractionDigits: 2});
+            player.currency = data.currency;
+          },
+          error => console.log(error),
+          () => console.log('Balance loaded!!' + player.balance)
+        );
+      });
   };
 
 }
