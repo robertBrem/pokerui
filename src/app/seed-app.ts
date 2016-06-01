@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {Router, RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 import {Home} from './components/home/home';
 import {About} from './components/about/about';
 import {LineChartDemo} from './components/chart/chart';
+import {KeycloakService} from '../keycloak';
 
 @Component({
   selector: 'seed-app',
@@ -19,7 +20,11 @@ import {LineChartDemo} from './components/chart/chart';
 ])
 export class SeedApp {
 
-  constructor() {
+  constructor(private kc:KeycloakService) {
+  }
+
+  logout() {
+    this.kc.logout();
   }
 
 }

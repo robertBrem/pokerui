@@ -5,12 +5,13 @@ import {Balance} from './../player/balance';
 import {AccountPosition} from './../accountPosition/accountPosition';
 import {PlayerService} from './../player/player-service';
 import {AccountPositionService} from './../accountPosition/accountposition-service';
+import {KeycloakService} from "../../../keycloak";
 
 @Component({
   selector: 'home',
   templateUrl: 'app/components/home/home.html',
   styleUrls: ['app/components/home/home.css'],
-  providers: [PlayerService, AccountPositionService],
+  providers: [PlayerService, AccountPositionService, KeycloakService],
   directives: [],
   pipes: []
 })
@@ -18,8 +19,11 @@ export class Home {
   private players:Player[];
   private selectedPlayer:Player;
   private accountPositions:AccountPosition[];
+  private roles:string[];
 
   constructor(private playerService:PlayerService, private accountPositionService:AccountPositionService) {
+    let roleText:string = KeycloakService.auth.authz['realmAccess']['roles'] + '';
+    this.roles = roleText.split(",");
   }
 
   ngOnInit() {
@@ -91,16 +95,16 @@ export class Home {
     this.playerService
       .getAll()
       .then(pro => {
-       pro.subscribe((data:Player[]) => {
-          this.players = data;
-          let key;
-          for (key in data) {
-            let player:Player = this.players[key];
-            this.updatePlayerWithBalance(player);
-          }
-        },
-        error => console.log(error),
-        () => console.log('Players loaded!!')
+        pro.subscribe((data:Player[]) => {
+            this.players = data;
+            let key;
+            for (key in data) {
+              let player:Player = this.players[key];
+              this.updatePlayerWithBalance(player);
+            }
+          },
+          error => console.log(error),
+          () => console.log('Players loaded!!')
         );
       });
   }

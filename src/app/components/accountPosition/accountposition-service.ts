@@ -24,17 +24,34 @@ export class AccountPositionService {
   public create = (playerId:number, amount:number, currency:string):Promise<Observable<AccountPosition>> => {
     var toAdd = JSON.stringify({playerId: playerId, amount: amount, currency: currency});
     return this.kc.getToken().then(token => {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + token);
       return this.http
-        .post(this.playersUrl + playerId + '/accountpositions/', toAdd, new RequestOptions({headers: headers}))
+        .post(this.playersUrl + playerId + '/accountpositions/', toAdd, new RequestOptions({headers: this.getHeaders(token)}))
         .map(res => res.json());
     });
   }
 
   public getBalance = (playerId:number):Promise<Observable<Balance>> => {
+    // let key;
+    // for (key in KeycloakService.auth) {
+    //   console.log('key: ' + key);
+    //   console.log('value: ' + KeycloakService.auth[key]);
+    // }
+    // for (key in KeycloakService.auth.authz) {
+    //   console.log('key: ' + key);
+    //   console.log('value: ' + KeycloakService.auth.authz[key]);
+    // }
+    // for (key in KeycloakService.auth.authz['idTokenParsed']) {
+    //   console.log('key: ' + key);
+    //   console.log('value: ' + KeycloakService.auth.authz['idTokenParsed'][key]);
+    // }
+    // for (key in KeycloakService.auth.authz['tokenParsed']) {
+    //   console.log('key: ' + key);
+    //   console.log('value: ' + KeycloakService.auth.authz['tokenParsed'][key]);
+    // }
+    // for (key in KeycloakService.auth.authz['realmAccess']) {
+    //   console.log('key: ' + key);
+    //   console.log('value: ' + KeycloakService.auth.authz['realmAccess'][key]);
+    // }
     return this.kc.getToken().then(token => {
       return this.http
         .get(this.playersUrl + playerId + '/balance', new RequestOptions({headers: this.getHeaders(token)}))
@@ -66,7 +83,7 @@ export class AccountPositionService {
     });
   }
 
-  private getHeaders(token) {
+  private getHeaders(token:string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
