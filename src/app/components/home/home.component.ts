@@ -8,7 +8,7 @@ import {AccountPositionService} from './../accountPosition/accountposition-servi
 import {KeycloakService} from "../../../keycloak";
 
 @Component({
-  selector: 'home',
+  selector: 'pui-home',
   templateUrl: 'app/components/home/home.html',
   styleUrls: ['app/components/home/home.css'],
   providers: [PlayerService, AccountPositionService, KeycloakService],

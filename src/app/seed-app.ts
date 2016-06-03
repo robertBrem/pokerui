@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
-import {Home} from './components/home/home';
+import {Home} from './components/home/home.component';
 import {About} from './components/about/about';
-import {LineChartDemo} from './components/chart/chart';
+import {LineChartDemo} from './components/chart/chart.component';
 import {KeycloakService} from '../keycloak';
 
 @Component({

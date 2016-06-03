@@ -1,16 +1,12 @@
 import {Component} from '@angular/core';
-import {LineChart, Message} from 'primeng/primeng';
+import {LineChart} from 'primeng/primeng';
 
-import {Player} from './../player/player';
-import {Balance} from './../player/balance';
-import {AccountPosition} from './../accountPosition/accountPosition';
 import {TimeEntry} from './../accountPosition/timeentry';
 import {HistoryEntry} from './../accountPosition/historyentry';
-import {PlayerService} from './../player/player-service';
 import {AccountPositionService} from './../accountPosition/accountposition-service';
 
 @Component({
-  selector: 'home',
+  selector: 'pui-chart',
   templateUrl: 'app/components/chart/chart.html',
   styleUrls: ['app/components/chart/chart.css'],
   providers: [AccountPositionService],
